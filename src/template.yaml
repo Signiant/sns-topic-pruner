@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Lambda function which runs a weekly report on unused SNS topics
+
+Parameters:
+  AppName:
+    Type: String
+    Default: "sns-topic-pruner"
+    Description: "Note: Must be all lowercase"
+  EnvName:
+    Type: String
+    Default: "dev"
+    Description: "Note: Must be all lowercase"
+
+Conditions:
+  EnableSchedule: !Equals
+    - !Ref EnvName
+    - prod
+
+Resources:
+  LambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Ref AppName
+      Handler: sns_topic_pruner.lambda_handler
+      Runtime: python3.11
+      CodeUri: .
+      Description: Lambda function which runs on a schedule and reports unused SNS topics
+      MemorySize: 128
+      Timeout: 900
+      Policies:
+        Statement:
+          - Action:
+            - sts:AssumeRole
+            Effect: Allow
+            Resource:
+            - '*'
+      Environment:
+        Variables:
+          SLACK_WEBHOOK_URL: # https://hooks.slack.com/services/...
+      Events:
+        ScheduledRule:
+          Type: Schedule
+          Properties:
+            Description: # a brief description (e.g. "Run every Monday at 9am")
+            Schedule: # a cron expression (e.g. "cron(0 13 ? * 2 *)")
+            State: !If [EnableSchedule, "ENABLED", "DISABLED"]
+            Input: # Lambda event data in JSON format (e.g. {\"account_numbers\": [\"123456789\", ...]})
+
+  InvokeLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: "SNSTopicPrunerRole"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              AWS: # the account containing the Lambda
+            Action: "sts:AssumeRole"
+            Condition:
+              StringEquals:
+                sts:ExternalId: # a unique identifier string
+      Path: /
+      Policies:
+        - PolicyName: "SNSTopicPruner"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "account:ListRegions"
+                  - "cloudformation:DescribeStackResources"
+                  - "cloudformation:ListStacks"
+                  - "iam:ListAccountAliases"
+                  - "sns:DeleteTopic"
+                  - "sns:ListSubscriptionsByTopic"
+                  - "sns:ListTagsForResource"
+                  - "sns:ListTopics"
+                Resource:
+                  - "*"
