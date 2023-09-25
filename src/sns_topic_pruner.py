@@ -8,6 +8,8 @@ import re
 import requests
 import sys
 
+EXTERNAL_ID = ""  # the unique id required to assume the topic pruner's role
+
 logging.basicConfig(format="%(asctime)s - %(levelname)8s: %(message)s", stream=sys.stdout)
 logging.getLogger("boto3").setLevel(logging.CRITICAL)
 logging.getLogger("botocore").setLevel(logging.CRITICAL)
@@ -526,7 +528,7 @@ def prune_account_topics(account_number, override=None, regions=None, dry_run=Fa
         assumed_role = boto3.client('sts').assume_role(
             RoleArn=f"arn:aws:iam::{account_number}:role/SNSTopicPrunerRole",
             RoleSessionName="Topic-Pruner",
-            ExternalId="UNIQUE-ID"  # the unique id required to assume the topic pruner role
+            ExternalId=EXTERNAL_ID
         )
     except ClientError as e:
         logging.error(e)

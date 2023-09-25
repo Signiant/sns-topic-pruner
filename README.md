@@ -47,8 +47,8 @@ Command line argument reference:
 1. Clone this repository or download the most recent release.
 2. In template.yaml, replace each commented line with relevant data. Refer to the **Lambda event variable** 
 table below when filling out the **Input** property.
-3. In sns_topic_pruner.py, replace the **ExternalId** value in the prune_account_topics function with the ExternalId
-specified in template.yaml.
+3. In sns_topic_pruner.py, replace the **EXTERNAL_ID** global variable string with the ExternalId specified in 
+template.yaml.
 4. In the same directory as the template file, create the build directory for the project using the following command:  
 `$ sam build`
 5. Deploy the development Lambda function and associated IAM role with the following command:  
