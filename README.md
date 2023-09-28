@@ -68,5 +68,5 @@ Lambda event variable reference:
 | account_numbers  | A list of account numbers to prune the topics of |    Yes     |          N/A          |
 |    overrides     | A list of topics to ignore                       |     No     |         None          |
 |     regions      | A list of regions to prune through               |     No     |  All Enabled Regions  |
-|     verbose      | Output more info in logs during execution        |     No     |         False         |
-|     dry_run      | Execute without making changes                   |     No     |         False         |
+|     verbose      | Output more info in logs during execution        |     No     |         True          |
+|     dry_run      | Execute without making changes                   |     No     |         True          |
