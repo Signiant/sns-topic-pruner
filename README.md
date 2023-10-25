@@ -52,11 +52,11 @@ template.yaml.
 4. In the same directory as the template file, create the build directory for the project using the following command:  
 `$ sam build`
 5. Deploy the development Lambda function and associated IAM role with the following command:  
-`$ sam deploy --stack_name TEXT -- s3-bucket TEXT --s3-prefix TEXT --region TEXT`  
+`$ sam deploy --stack-name TEXT --s3-bucket TEXT --s3-prefix TEXT --region TEXT`  
 OR  
 Deploy the production Lambda function and associated IAM role, meaning it will run on a schedule, with the following 
 command:  
-`$ sam deploy --stack_name TEXT -- s3-bucket TEXT --s3-prefix TEXT --region TEXT --parameter-overrides "EnvName="prod""`  
+`$ sam deploy --stack-name TEXT --s3-bucket TEXT --s3-prefix TEXT --region TEXT --parameter-overrides "EnvName="prod""`  
 (Optional) *Create an AWS SAM CLI config file to skip entering these arguments every time you want to deploy. Learn about that 
 [here](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-config.html).*
 
