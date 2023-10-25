@@ -9,7 +9,7 @@ In addition to the base script, a CloudFormation template is included to facilit
 
 Alongside **Python 3.11+**, the following packages must be installed to run this tool:
 - boto3
-- requirements
+- requests
 
 Additionally, you need to have both AWS CLI & AWS SAM CLI installed and configured. The following guides provide 
 detailed instructions on how to do so:
